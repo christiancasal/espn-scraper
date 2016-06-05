@@ -24,31 +24,27 @@ router.get('/', function(req, res, next) {
 });
 
 function update_mongo_db(league){
-  var queryUrl = 'https://espn.go.com'
+  var queryUrl = 'https://espn.go.com';
   request(queryUrl + "/" + league, function (error, response, html) {
     if (!error && response.statusCode == 200) {
       console.log('request success!');
 
       var $ = cheerio.load(html);
 
-      var article = new Headlines({
-        league: "",
-        title: "",
-        link: "",
-        text: "",
-        viewed: false,
-        note: ""
-      });
-
-
       $('.headlines').each(function(i, element){
 
         var pull = $(this).children().children().children()
 
         for (var i = 0; i < pull.length; i++) {
-          article.league = league
-          article.title = pull[i].children[0].data;
-          article.link = pull[i].attribs.href;
+
+          var article = new Headlines({
+              league: league,
+              headline: pull[i].children[0].data,
+              link: pull[i].attribs.href,
+              text: "",
+              viewed: false,
+              note: ""
+          });
 
           //gets article text
           request(queryUrl + article.link, function (error, response, html) {
