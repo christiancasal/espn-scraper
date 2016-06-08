@@ -1,2 +1,37 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+  <div class="col-md-4" id="userinput">
+    <br>
+      <p>Note</p>
+      <textarea id="note"></textarea>
+    <div id="buttons">
+      <div id="actionbutton">
+        <button class="btn btn-default" id="makenew">Submit</button>
+      </div>
+      <button class="btn btn-default" id="clearall">Delete All Notes</button>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="col-md-12">
+      <button class="btn btn-default league" id="nba">NBA</button>
+      <button class="btn btn-default league" id="nfl">NFL</button>
+      <button class="btn btn-default league" id="mlb">MLB</button>
+      <button class="btn btn-default league" id="nhl">NHL</button>
+      <button class="btn btn-default league" id="college-football">College</button>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <br>
+    <p>Article</p>
+    <div id="results">
+      {{#each results}}
+        <p>
+          {{this.league}}
+          {{this.headline}}
+          {{this.link}}
+          {{this.text}}
+          {{this.viewed}}
+        </p>
+      {{/each}}
+    </div>
+  </div>

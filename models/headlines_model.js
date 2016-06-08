@@ -20,5 +20,6 @@ var headlinesSchema = mongoose.Schema({
 //define model
 var Headlines = mongoose.model('Headlines', headlinesSchema);
 
+
 //export model
 module.exports = [Headlines, db];
