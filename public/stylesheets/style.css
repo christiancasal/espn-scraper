@@ -1,6 +1,14 @@
+@font-face {
+    font-family: sporty;
+    src: url('../fonts/SFSportsNight.ttf');
+}
+
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  font-size: 14px;
+  color: #E3FFEB;
+  background-color: #B22A28;
 }
 
 a {
@@ -12,12 +20,11 @@ a {
     text-align:right;
   }
   h1 {
-    font-size: 40px;
-    color:white;
+    font-size: 100px;
+    font-family: sporty;
   }
   body{
     text-align: center;
-    background-color: cornflowerblue;
   }
   .deleter{
     color: red;
@@ -28,22 +35,23 @@ a {
     margin:0 auto;
     font-size: 42px;
     height:50px;
-    background-color: antiquewhite;
+    background-color: #E3FFEB;
   }
-  textarea{
+  #note{
     width:350px;
     margin:0 auto;
-    height:150px;
-    font-size: 24px;
-    background-color: antiquewhite;
-
+    height:100px;
+    font-size: 14px;
+    background-color: #E3FFEB;
+    color: black;
   }
   #dataentry{
     cursor: pointer;
     font-size: 24px;
   }
   #results{
-    background-color: antiquewhite;
+    background-color: #E3FFEB;
+    color: black;
     width:400px;
     overflow: auto;
     margin: 0 auto;
