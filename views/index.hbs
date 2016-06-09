@@ -1,2 +1,39 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<div class="container">
+  <div class="col-md-12">
+    <div class="col-md-12">
+      <button class="btn btn-default league" id="nba">NBA</button>
+      <button class="btn btn-default league" id="nfl">NFL</button>
+      <button class="btn btn-default league" id="mlb">MLB</button>
+      <button class="btn btn-default league" id="nhl">NHL</button>
+      <button class="btn btn-default league" id="college-football">College</button>
+    </div>
+  </div>
+
+  <div class="col-md-4" id="userinput">
+    <br>
+      <h4>Note</h4>
+      <textarea class="form-control" id="note"></textarea>
+    <div id="buttons">
+      <div id="actionbutton">
+        <button class="btn btn-default btn-sm active" id="makenew">Leave a note!</button>
+      </div>
+      <button class="btn btn-default btn-sm active" id="clearall">Delete All Notes</button>
+    </div>
+  </div>
+
+{{#each results}}
+  {{#unless this.viewed}}
+  <div class="col-md-7 col-md-offset-1 text-left article-container">
+    <div id="col-md-12">
+        <h4 class="headline">{{this.headline}}</h4>
+        <br>
+        <p class="results">
+          {{this.text}}
+        </p>
+        <button class="btn btn-default btn-sm active clear" data-link="{{this.link}}" data-view="{{this.viewed}}">Article</button>
+    </div>
+  </div>
+  {{/unless}}
+{{/each}}
+</div>
