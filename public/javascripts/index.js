@@ -1,6 +1,6 @@
 function getResults(){
-  $('#results');
-  $.getJSON('/update-link', function(data) {
+  $('.article-container');
+  $.getJSON('/update-all', function(data) {
     for (var i = 0; i<data.length; i++){
       $('#results').prepend('<p id="dataentry" data-id=' +data[i]._id+ '>' + data[i].title + '<span class=deleter>X</span></p>');
     }
@@ -23,6 +23,46 @@ $('#makenew').on('click', function(){
     $('#note').val("");
   }
   );
+});
+
+$(document).on('click','.league', function(){
+  var selected = $(this)[0].id;
+  console.log(selected);
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    url: '/update-sport/',
+    cache: false,
+    data: {id: selected},
+    success: function(response){
+      console.log(response);
+      // $('#results').empty();
+    }
+  });
+});
+
+$(document).on('click','.clear', function(){
+  console.log('clear');
+  var selected_link = $(this)[0].dataset.link;
+  var selected_view = $(this)[0].dataset.view;
+
+  console.log($(this))
+  console.log($(this)[0]);
+
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    url: '/article-viewed',
+    cache: false,
+    data: {
+      send_link: selected_link,
+      send_view: selected_view
+    },
+    success: function(response){
+      console.log(response);
+      // $('#results').empty();
+    }
+  });
 });
 //
 // $('#clearall').on('click', function(){

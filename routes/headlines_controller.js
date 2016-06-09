@@ -2,9 +2,22 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 var cheerio = require('cheerio');
+var bodyParser = require('body-parser');
 
 var Headlines = require('../models/headlines_model.js')[0]
 var db = require('../models/headlines_model.js')[1];
+
+var bodyParser = require('body-parser');
+
+var bodyParser = require('body-parser');
+var logger = require('morgan');
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({extended: false}));
+router.use(bodyParser.text());
+router.use(bodyParser.json({type:'application/vnd.api+json'}));
+
+router.use(express.static('public'));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -22,7 +35,8 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.get('/update-link', function(req, res, next) {
+//initial update
+router.get('/update-all', function(req, res, next) {
   var sports = [
     'nfl',
     'nba',
@@ -32,7 +46,7 @@ router.get('/update-link', function(req, res, next) {
   ]
 
   for (var i = 0; i < sports.length; i++) {
-    update_mongo_db(sports[i])
+    update_sport(sports[i])
   }
 
   res.redirect('/update-text')
@@ -52,6 +66,33 @@ router.get('/update-text', function(req, res) {
     }//end of text updater
   });
 });
+
+router.get('/update-sport', function(req, res) {
+  var sports_id = req.query.id;
+  update_sport(sports_id);
+
+  res.redirect('/update-text')
+  // res.render('index', { title: 'ESPN Headlines'});
+});
+
+router.get('/article-viewed', function(req, res) {
+  var current_link = req.query.send_link;
+  var current_view = req.query.send_view;
+  console.log(current_link);
+  console.log(current_view);
+
+  var updates = { $set: { viewed: true } };
+
+  Headlines.findOneAndUpdate({link: current_link}, updates, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('updated!');
+      res.redirect('/');
+    }
+  });//end of view updater
+});//end route
+
 // router.post('/submit', function(req, res) {
 // 	console.log(req.body);
 //   db.notes.save(req.body, function(err, saved) {
@@ -78,7 +119,8 @@ router.get('/update-text', function(req, res) {
 //   res.render('index', { title: 'ESPN Headlines' });
 // });
 
-function update_mongo_db(league){
+function update_sport(league){
+  console.log(league);
   var queryUrl = 'https://espn.go.com';
   request(queryUrl + "/" + league, function (error, response, html) {
     if (!error && response.statusCode == 200) {
@@ -108,85 +150,11 @@ function update_mongo_db(league){
               function(err, numAffected) {
                 if (err) throw err
               });
-                // Headlines.find({text: ""}, 'link', function(err, found) {
-                //   if (err) {
-                //     console.log(err);
-                //   } else {
-                //     // console.log(found[0].link;
-                //     for(j = 0; j < found.length; j++){
-                //       var found_link = found[j].link;
-                //
-                //       request(queryUrl + found[j].link, function (error, response, html) {
-                //         if (!error && response.statusCode == 200) {
-                //           console.log('request success!');
-                //
-                //           var $ = cheerio.load(html);
-                //
-                //           $('.article-body').each(function(i, element){
-                //             var article_text = $(this).children().text();
-                //
-                //             console.log(article_text);
-                //             console.log('article update here');
-                //
-                //             Headlines.update(
-                //                 {link: found_link},
-                //                 {$set: { text: article_text }},
-                //                 {upsert: true},
-                //                 function(err, numAffected) {
-                //                   if (err) throw err
-                //                 }
-                //             );
-                //
-                //           });
-                //         }
-                //       });
-                //     }
-                //   }
-                // })//end of function
-          // );
-
-
         }//end of for loop
       });//end of each statement
-
-      // Headlines.find({text: ""}, 'link', function(err, found) {
-      //   if (err) {
-      //     console.log(err);
-      //   } else {
-      //     // console.log(found[0].link;
-      //     for(i = 0; i < found.length; i++){
-      //       var found_link = found[i].link;
-      //       console.log(found_link);
-      //
-      //       request(queryUrl + found_link, function (error, response, html) {
-      //         if (!error && response.statusCode == 200) {
-      //           console.log('request success!');
-      //
-      //           var $ = cheerio.load(html);
-      //
-      //           $('.article-body').each(function(i, element){
-      //             var article_text = $(this).children().text();
-      //
-      //             // console.log(article_text);
-      //             console.log('article update here');
-      //
-      //             Headlines.update(
-      //                 {link: found_link},
-      //                 {$set: { text: article_text }},
-      //                 {upsert: true},
-      //                 function(err, numAffected) {
-      //                   if (err) throw err
-      //                 }
-      //             );
-      //           });
-      //         }
-      //       });
-      //     }
-      //   }
-      // })//end of text updater
-    }
-  });
-}
+    }//end if statement
+  });//end request url
+}//end function
 
 function update_links_w_text(found_link){
     var queryUrl = 'https://espn.go.com';

@@ -49,13 +49,13 @@ a {
     cursor: pointer;
     font-size: 24px;
   }
-  #results{
+  .results{
     background-color: #E3FFEB;
     color: black;
-    width:400px;
+    /*width:400px;*/
     overflow: auto;
     margin: 0 auto;
-    height:200px;
+    /*height:200px;*/
   }
   #actionbutton{
     display: inline-block;
