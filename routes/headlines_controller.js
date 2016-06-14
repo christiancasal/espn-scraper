@@ -7,15 +7,11 @@ var bodyParser = require('body-parser');
 var Headlines = require('../models/headlines_model.js')[0]
 var db = require('../models/headlines_model.js')[1];
 
-var bodyParser = require('body-parser');
 
-var bodyParser = require('body-parser');
-var logger = require('morgan');
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({extended: false}));
-router.use(bodyParser.text());
-router.use(bodyParser.json({type:'application/vnd.api+json'}));
+// router.use(bodyParser.json());
+// router.use(bodyParser.urlencoded({extended: false}));
+// router.use(bodyParser.text());
+// router.use(bodyParser.json({type:'application/vnd.api+json'}));
 
 router.use(express.static('public'));
 
@@ -54,7 +50,6 @@ router.get('/update-all', function(req, res, next) {
 });
 
 router.get('/update-text', function(req, res) {
-
   Headlines.find({text: ""}, 'link', function(err, found) {
     if (err) {
       console.log(err);
@@ -71,7 +66,19 @@ router.get('/update-sport', function(req, res) {
   var sports_id = req.query.id;
   update_sport(sports_id);
 
-  res.redirect('/update-text')
+  //get one article
+  Headlines.find({ league: sports_id, viewed: false }
+    .sort({_id: -1})
+    .limit(1), function(err, found){
+        if(err){
+          console.log(err);
+        } else{
+          console.log(found);
+          res.render('index', { title: 'ESPN Headlines', results: found});
+        }
+    })
+
+
   // res.render('index', { title: 'ESPN Headlines'});
 });
 
