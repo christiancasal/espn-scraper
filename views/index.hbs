@@ -23,7 +23,6 @@
   </div>
 
 {{#each results}}
-  {{#unless this.viewed}}
   <div class="col-md-7 col-md-offset-1 text-left article-container">
     <div id="col-md-12">
         <h4 class="headline">{{this.headline}}</h4>
@@ -34,6 +33,5 @@
         <button class="btn btn-default btn-sm active clear" data-link="{{this.link}}" data-view="{{this.viewed}}">Article</button>
     </div>
   </div>
-  {{/unless}}
 {{/each}}
 </div>

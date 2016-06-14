@@ -1,9 +1,9 @@
 function getResults(){
-  $('.article-container');
+  // $('.article-container').empty();
   $.getJSON('/update-all', function(data) {
-    for (var i = 0; i<data.length; i++){
-      $('#results').prepend('<p id="dataentry" data-id=' +data[i]._id+ '>' + data[i].title + '<span class=deleter>X</span></p>');
-    }
+    // for (var i = 0; i<data.length; i++){
+    //   $('#results').prepend('<p id="dataentry" data-id=' +data[i]._id+ '>' + data[i].title + '<span class=deleter>X</span></p>');
+    // }
   });
 }
 
@@ -35,8 +35,8 @@ $(document).on('click','.league', function(){
     cache: false,
     data: {id: selected},
     success: function(response){
+      console.log('ajax success');
       console.log(response);
-      // $('#results').empty();
     }
   });
 });

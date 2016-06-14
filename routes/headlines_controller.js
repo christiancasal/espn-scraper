@@ -7,32 +7,29 @@ var bodyParser = require('body-parser');
 var Headlines = require('../models/headlines_model.js')[0]
 var db = require('../models/headlines_model.js')[1];
 
-var bodyParser = require('body-parser');
-
-var bodyParser = require('body-parser');
-var logger = require('morgan');
-
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({extended: false}));
-router.use(bodyParser.text());
-router.use(bodyParser.json({type:'application/vnd.api+json'}));
+//
+// router.use(bodyParser.json());
+// router.use(bodyParser.urlencoded({extended: false}));
+// router.use(bodyParser.text());
+// router.use(bodyParser.json({type:'application/vnd.api+json'}));
 
 router.use(express.static('public'));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Headlines.find({viewed: false}, function(err, found) {
-    if (err) {
-      console.log(err);
-    } else {
-      // console.log(found);
-      // var foundObj = {
-      //   results: found
-      // }
-      res.render('index', { title: 'ESPN Headlines', results: found});
-      // res.json(foundObj);
-    }
-  });
+  res.redirect('update-sport')
+  // Headlines.find({viewed: false}, function(err, found) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     // console.log(found);
+  //     // var foundObj = {
+  //     //   results: found
+  //     // }
+  //     res.render('index', { title: 'ESPN Headlines', results: found});
+  //     // res.json(foundObj);
+  //   }
+  // });
 });
 
 //initial update
@@ -48,13 +45,11 @@ router.get('/update-all', function(req, res, next) {
   for (var i = 0; i < sports.length; i++) {
     update_sport(sports[i])
   }
-
   res.redirect('/update-text')
   // res.render('index', { title: 'ESPN Headlines'});
 });
 
 router.get('/update-text', function(req, res) {
-
   Headlines.find({text: ""}, 'link', function(err, found) {
     if (err) {
       console.log(err);
@@ -62,7 +57,7 @@ router.get('/update-text', function(req, res) {
       for (var i = 0; i < found.length; i++) {
         update_links_w_text(found[i].link);
       }
-      res.end();
+      res.redirect('/');
     }//end of text updater
   });
 });
@@ -70,9 +65,17 @@ router.get('/update-text', function(req, res) {
 router.get('/update-sport', function(req, res) {
   var sports_id = req.query.id;
   update_sport(sports_id);
-
-  res.redirect('/update-text')
-  // res.render('index', { title: 'ESPN Headlines'});
+  //get one article
+  Headlines.find({league: sports_id}, function(err, found) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(found);
+      console.log('hello');
+      // res.render('index', { headline: found[0].headline, text: found[0].text });
+      res.render('index', { title: 'ESPN Headlines', results: found });
+    }//end of text updater
+  }).sort({_id: -1}).limit(1);
 });
 
 router.get('/article-viewed', function(req, res) {
@@ -169,8 +172,6 @@ function update_links_w_text(found_link){
           var article_text = $(this).children().text();
 
           // console.log(article_text);
-          console.log('article update here');
-          console.log(found_link);
           Headlines.update(
               {link: found_link},
               {$set: { text: article_text }},
