@@ -28,17 +28,22 @@ $('#makenew').on('click', function(){
 $(document).on('click','.league', function(){
   var selected = $(this)[0].id;
   console.log(selected);
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    url: '/update-sport/',
-    cache: false,
-    data: {id: selected},
-    success: function(response){
-      console.log('ajax success');
-      console.log(response);
-    }
-  });
+
+
+  window.location.href = '/view/'+selected;
+
+  //
+  // $.ajax({
+  //   type: "GET",
+  //   dataType: "json",
+  //   url: '/update-sport/',
+  //   cache: false,
+  //   data: {id: selected},
+  //   success: function(response){
+  //     console.log('ajax success');
+  //     console.log(response);
+  //   }
+  // });
 });
 
 $(document).on('click','.clear', function(){
